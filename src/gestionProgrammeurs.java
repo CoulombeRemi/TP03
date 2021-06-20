@@ -84,8 +84,8 @@ public class gestionProgrammeurs {
 
         do {
             affMenu();
-            
-			rep = Integer.parseInt(/*Lire au clavier*/);
+
+			rep = Integer.parseInt(null/*Lire au clavier*/);
                 System.out.println("\n\n");
                 
                 switch (rep) {
