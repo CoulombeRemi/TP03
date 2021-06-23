@@ -1,11 +1,14 @@
 //Toutes les question sont des requêtes au serveur.
 // yo
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.Scanner;
 public class gestionProgrammeurs {
+	private static final String FILE_PATH = "documents\\programmeurs.txt";
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/bdprogrammeurs?serverTimezone=UTC"; // bd faite dans mysql local
 	private static final String USAGER = "root"; 
@@ -36,7 +39,29 @@ public class gestionProgrammeurs {
      // Intialiasitation de la table programmeurs à partir des données lues dans un fichier texte.
     
     public static void chargerBase()  {
-          System.out.println("Opération non encore implémentée");
+    	try(BufferedReader fileR = new BufferedReader(new FileReader(FILE_PATH))){
+    		String line;
+    		preparedStatement = con.prepareStatement("insert into programmeurs values (default, ?,?,?);");
+    		while((line = fileR.readLine()) != null) {
+    			String[] row = line.split(" ");
+    			String nom = row[0];
+    			String jour = row[1];
+    			int tasses = Integer.parseInt(row[2]);
+    			
+    			preparedStatement.setString(1, nom);
+    			preparedStatement.setString(2, jour);
+    			preparedStatement.setInt(3, tasses);
+    			preparedStatement.executeUpdate();
+    		}
+    		fileR.close();
+    	}catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
   
@@ -71,15 +96,10 @@ public class gestionProgrammeurs {
     
     
      // Affiche le nombre total de tasses consommées.
-     
     public static void nbreTotalTasses(ResultSet result) throws SQLException {
-          String output = "Le nombre total de tasses consommées : ";
           int tasseTotal = 0;
-          
-          while(result.next()) {
-        	  tasseTotal += result.getInt(DB_TASSES);
-          }
-          System.out.println(output + tasseTotal + " tasses");
+          while(result.next()) {tasseTotal += result.getInt(DB_TASSES);}
+          System.out.println("Le nombre total de consommations : " + tasseTotal + " tasses");
     }
     
     
@@ -89,7 +109,7 @@ public class gestionProgrammeurs {
     public static void nbreTotalTassesPgm() {
     	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     	String name;
-    	String sql = "Select * from programmeurs where nom = ?";
+    	String sql = "Select * from programmeurs where nom = ?;";
     	int nbrTasses = 0;
     	
     	System.out.print("Entrer le nom du programmeur : ");
@@ -107,7 +127,6 @@ public class gestionProgrammeurs {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
@@ -143,7 +162,7 @@ public class gestionProgrammeurs {
     public static void main(String[] args) {
         int rep;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String sql = "Select * from programmeurs order by tasses desc";
+        String sql = "Select * from programmeurs order by tasses desc;";
         // Ouvrir une connexion à Oracle
         // A FAIRE
 		try{    
@@ -167,7 +186,7 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 3 : nbreTassesMax(rs);
 	                    break;
-	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select * from programmeurs")); // a voir
+	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select tasses from programmeurs;")); // a voir
 	                    break;
 	                    case 5 : nbreTotalTassesPgm();
 	                    break;

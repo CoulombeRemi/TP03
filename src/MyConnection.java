@@ -17,7 +17,7 @@ class MyConnection{
 		con = DriverManager.getConnection(DB_URL,USAGER,PASS);  
 		//here sonoo is database name, root is username and password  
 		stmt = con.createStatement();  
-		rs = stmt.executeQuery("select * from dbprogrammeurs");  
+		rs = stmt.executeQuery("select * from programmeurs");  
 		while(rs.next()) {
 			//System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3)+"  "+rs.getInt(1));  
 		}
