@@ -25,7 +25,17 @@ public class gestionProgrammeurs {
      // Création de la table programmeurs
      
     public static void creerEtInitialiserTable() {
-       System.out.println("Opération non encore implémentée");
+       String sql = "CREATE TABLE programmeurs " +
+               "(id INTEGER not NULL, " +
+               " nom VARCHAR(20), " + 
+               " journee VARCHAR(10), " + 
+               " tasses INTEGER, " + 
+               " PRIMARY KEY ( id ))"; 
+       try {
+    	   stmt.executeUpdate(sql);
+       }catch(SQLException e) {
+    	   System.out.println(e);
+       }
     }
 
     
@@ -33,7 +43,7 @@ public class gestionProgrammeurs {
      
     public static void supprimerTable() {
        try {
-    	   stmt.executeQuery("drop table programmeurs;");
+    	   stmt.executeUpdate("drop table programmeurs;");
        } catch (SQLException e) {
     	   System.out.println("La table n'existe pas.");
        }
