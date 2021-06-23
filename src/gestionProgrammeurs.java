@@ -31,7 +31,7 @@ public class gestionProgrammeurs {
      
     public static void creerEtInitialiserTable() {
        String sql = "CREATE TABLE programmeurs " +
-               "(id INTEGER not NULL, " +
+               "(id INTEGER not NULL AUTO_INCREMENT, " +
                " nom VARCHAR(20), " + 
                " journee VARCHAR(10), " + 
                " tasses INTEGER, " + 
@@ -163,9 +163,11 @@ public class gestionProgrammeurs {
 	    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
 	    		String outputCol = "Nom col.\tType\n------------------------\n";
 	    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
+	    		
 	    		while(column.next()) {
 	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + column.getString("DATA_TYPE") + "\n";
 	    		}
+	    		
 	    		while(result.next()) {
 	    			String nomEmp = result.getString(DB_NOM);
 	          	 	String jour = result.getString(DB_JOUR);
@@ -217,7 +219,7 @@ public class gestionProgrammeurs {
 			Class.forName(JDBC_DRIVER); 
 			con = DriverManager.getConnection(DB_URL,USAGER,PASS);
 			stmt = con.createStatement();  
-			rs = stmt.executeQuery(sql);  
+			//rs = stmt.executeQuery(sql);  
 		
 	        do {
 	            affMenu();
@@ -232,7 +234,7 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 2 : supprimerTable();
 	                    break;
-	                    case 3 : nbreTassesMax(rs);
+	                    case 3 : nbreTassesMax(stmt.executeQuery("Select * from programmeurs order by tasses desc;"));
 	                    break;
 	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select tasses from programmeurs;")); // a voir
 	                    break;
