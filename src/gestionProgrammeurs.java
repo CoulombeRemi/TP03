@@ -9,7 +9,7 @@ public class gestionProgrammeurs {
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/bdprogrammeurs?serverTimezone=UTC"; // bd faite dans mysql local
 	private static final String USAGER = "root"; 
-	private static final String PASS = "cod7blackops"; // mettre le mdp de la bd local mysql
+	private static final String PASS = "MySQLP4ss!"; // mettre le mdp de la bd local mysql
 	private static ResultSet rs = null;
 	private static Connection con = null;
 	private static Statement stmt = null;
