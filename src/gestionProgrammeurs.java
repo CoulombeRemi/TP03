@@ -77,7 +77,7 @@ public class gestionProgrammeurs {
     }
     
     
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         int rep;
         // Ouvrir une connexion à Oracle
         // A FAIRE
@@ -116,6 +116,6 @@ public class gestionProgrammeurs {
         // Fermer la connexion à Oracle
         
 		//Autres si nécessaire
-    }
+    }*/
     
 }
