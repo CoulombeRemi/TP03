@@ -1,6 +1,7 @@
 //Toutes les question sont des requêtes au serveur.
 // yo
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
 import java.util.Scanner;
@@ -12,6 +13,7 @@ public class gestionProgrammeurs {
 	private static ResultSet rs = null;
 	private static Connection con = null;
 	private static Statement stmt = null;
+    private static PreparedStatement preparedStatement = null;
     // variables pour le nom des tables de la bd
 	private static final String DB_NOM = "nom";
 	private static final String DB_JOUR = "journee";
@@ -85,7 +87,29 @@ public class gestionProgrammeurs {
      * des consommations de celui-ci.
      */
     public static void nbreTotalTassesPgm() {
-          System.out.println("Opération non encore implémentée");
+    	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    	String name;
+    	String sql = "Select * from dbprogrammeurs where nom = ?";
+    	int nbrTasses = 0;
+    	
+    	System.out.print("Entrer le nom du programmeur : ");
+    	
+    	try {
+    		name = reader.readLine();
+    		preparedStatement = con.prepareStatement(sql);
+    		preparedStatement.setString(1, name);
+    		rs = preparedStatement.executeQuery();
+    		while(rs.next()) {
+    			nbrTasses += rs.getInt(DB_TASSES);
+    		}
+    		System.out.println("Le nombre total de tasses consommées par " + name + " est : " + nbrTasses);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     /*
