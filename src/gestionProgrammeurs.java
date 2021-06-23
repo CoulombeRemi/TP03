@@ -1,3 +1,8 @@
+/**
+ * Rémi Coulombe - 20130013
+ * Yanoé Roy-Fitton - 20175985
+ * IFT1176 - tp03 - été 21
+ */
 //Toutes les question sont des requêtes au serveur.
 // yo
 import java.io.BufferedReader;
@@ -6,7 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.*;
-import java.util.Scanner;
+
 public class gestionProgrammeurs {
 	private static final String FILE_PATH = "documents\\programmeurs.txt";
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -150,8 +155,39 @@ public class gestionProgrammeurs {
      */
 	 
     public static void requeteLibreEtMetaDonnees() {
-          System.out.println("Opération non encore implémentée");
-        
+        try {
+        	DatabaseMetaData databaseMetaData = con.getMetaData();
+            ResultSet result = stmt.executeQuery("select * from programmeurs");
+            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
+	    	if(result.next()) {
+	    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
+	    		String outputCol = "Nom col.\tType\n------------------------\n";
+	    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
+	    		while(column.next()) {
+	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + column.getString("DATA_TYPE") + "\n";
+	    		}
+	    		while(result.next()) {
+	    			String nomEmp = result.getString(DB_NOM);
+	          	 	String jour = result.getString(DB_JOUR);
+	          	 	int nbrTasses = result.getInt(DB_TASSES);
+	          	 	outputList += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses+"\n";
+	    		}
+	    		System.out.println(outputNbrCol + "\n\n" + outputCol+"\n"+outputList);
+	    	}else {
+	    		// on affiche le nombre de lignes modifiees dans la table
+	    	}
+        }catch(SQLException e) {
+        	System.out.println(e);
+        }
+    }
+    // methode pour ajuster le nbr de \t a faire pour un string
+    private static String lengthCheck(String str) {
+    	if(str.length() >= 8) {
+    		str+="\t";
+    	}else {
+    		str+="\t\t";
+    	}
+    	return str;
     }
      
        
