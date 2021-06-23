@@ -32,17 +32,17 @@ public class gestionProgrammeurs {
      * que sa consommation ce jour la, puis la liste des personnes ordonnee par ordre décroissant
      * du nombre de consommations.
      */
-    public static void nbreTassesMax()   {
+    public static void nbreTassesMax() throws SQLException   {
           // variables pour la personne ayant consomé le plus de tasse de café pour une journée
           String nomEmpPT = "";
           String jourPT = "";
           int  nbrTassesPT = 0;
           String outputPlusCons = "Personne ayant la plus grande consommation pour une journée :\n";
           String outputListe = "Liste des personnes par ordre de consommations :\nNom\tJour\tTasses\n";
-          
-          // probablement à changer
+          Statement stmt;
+          Connection con = (Connection) MyConnection.getCon().createStatement();
           stmt = con.createStatement();
-          String sql = "Select * from programmeurs";
+          String sql = "Select * from dbprogrammeurs";
           ResultSet rs = stmt.executeQuery(sql);
           
           while(rs.next()) {
@@ -57,8 +57,10 @@ public class gestionProgrammeurs {
         	  }
         	  outputListe += nomEmp + "\t" + jour + "\t" + nbrTasses + "\n";
           }
+           
           outputPlusCons += nomEmpPT + "\t" + jourPT + "\t" + nbrTassesPT + "\n";
           System.out.println(outputPlusCons + "\n\n" + outputListe);
+          con.close(); 
     }
     
     
