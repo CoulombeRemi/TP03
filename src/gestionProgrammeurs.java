@@ -89,7 +89,7 @@ public class gestionProgrammeurs {
     public static void nbreTotalTassesPgm() {
     	BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
     	String name;
-    	String sql = "Select * from dbprogrammeurs where nom = ?";
+    	String sql = "Select * from programmeurs where nom = ?";
     	int nbrTasses = 0;
     	
     	System.out.print("Entrer le nom du programmeur : ");
@@ -143,7 +143,7 @@ public class gestionProgrammeurs {
     public static void main(String[] args) {
         int rep;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String sql = "Select * from dbprogrammeurs order by tasses desc";
+        String sql = "Select * from programmeurs order by tasses desc";
         // Ouvrir une connexion à Oracle
         // A FAIRE
 		try{    
@@ -167,7 +167,7 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 3 : nbreTassesMax(rs);
 	                    break;
-	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select * from dbprogrammeurs")); // a voir
+	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select * from programmeurs")); // a voir
 	                    break;
 	                    case 5 : nbreTotalTassesPgm();
 	                    break;
