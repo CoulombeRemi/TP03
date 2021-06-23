@@ -50,10 +50,10 @@ public class gestionProgrammeurs {
           String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\tJour\tTasses\n----------------------\n";
           String outputListe = "Liste des personnes par ordre de consommations :\nNom\tJour\tTasses\n----------------------\n";
           
-          while(rs.next()) {
-        	  String nomEmp = rs.getString(DB_NOM);
-        	  String jour = rs.getString(DB_JOUR);
-        	  int nbrTasses = rs.getInt(DB_TASSES);
+          while(result.next()) {
+        	  String nomEmp = result.getString(DB_NOM);
+        	  String jour = result.getString(DB_JOUR);
+        	  int nbrTasses = result.getInt(DB_TASSES);
         	  // on trouve la personne avec la plus grande consommation
         	  if(nbrTassesPT < nbrTasses) {
         		  nomEmpPT = nomEmp;
@@ -117,44 +117,44 @@ public class gestionProgrammeurs {
         // Ouvrir une connexion à Oracle
         // A FAIRE
 		try{    
-		Class.forName(JDBC_DRIVER); 
-		con = DriverManager.getConnection(DB_URL,USAGER,PASS);    
-		stmt = con.createStatement();  
-		rs = stmt.executeQuery(sql);  
+			Class.forName(JDBC_DRIVER); 
+			con = DriverManager.getConnection(DB_URL,USAGER,PASS);
+			stmt = con.createStatement();  
+			rs = stmt.executeQuery(sql);  
 		
-        do {
-            affMenu();
-            
-			rep = Integer.parseInt(reader.readLine());
-                System.out.println("\n\n");
-                
-                switch (rep) {
-                    case 0 : System.out.println("au revoir");
-                    break;
-                    case 1 : creerEtInitialiserTable();
-                    break;
-                    case 2 : supprimerTable();
-                    break;
-                    case 3 : nbreTassesMax(rs);
-                    break;
-                    case 4 : nbreTotalTasses();
-                    break;
-                    case 5 : nbreTotalTassesPgm();
-                    break;
-                    case 6 : requeteLibreEtMetaDonnees();
-                    break;
-                    case 7 : chargerBase();
-                    break;
-                    
-                    default:
-                        System.out.println("Valeur erronée !");
-                }  // end switch
-                
-
-        } while (rep != 0);
-        
-        // Fermer la connexion à Oracle
-        con.close();  
+	        do {
+	            affMenu();
+	            
+				rep = Integer.parseInt(reader.readLine());
+	                System.out.println("\n\n");
+	                
+	                switch (rep) {
+	                    case 0 : System.out.println("au revoir");
+	                    break;
+	                    case 1 : creerEtInitialiserTable();
+	                    break;
+	                    case 2 : supprimerTable();
+	                    break;
+	                    case 3 : nbreTassesMax(rs);
+	                    break;
+	                    case 4 : nbreTotalTasses();
+	                    break;
+	                    case 5 : nbreTotalTassesPgm();
+	                    break;
+	                    case 6 : requeteLibreEtMetaDonnees();
+	                    break;
+	                    case 7 : chargerBase();
+	                    break;
+	                    
+	                    default:
+	                        System.out.println("Valeur erronée !");
+	                }  // end switch
+	                
+	
+	        } while (rep != 0);
+	        
+	        // Fermer la connexion à Oracle
+	        con.close();  
 		}catch(Exception e){
 			System.out.println(e);
 		} 
