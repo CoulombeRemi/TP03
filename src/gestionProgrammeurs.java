@@ -32,7 +32,11 @@ public class gestionProgrammeurs {
      // Destruction de la table programmeurs.
      
     public static void supprimerTable() {
-       System.out.println("Opération non encore implémentée");
+       try {
+    	   stmt.executeQuery("drop table programmeurs;");
+       } catch (SQLException e) {
+    	   System.out.println("La table n'existe pas.");
+       }
     }
 
    
@@ -47,7 +51,6 @@ public class gestionProgrammeurs {
     			String nom = row[0];
     			String jour = row[1];
     			int tasses = Integer.parseInt(row[2]);
-    			
     			preparedStatement.setString(1, nom);
     			preparedStatement.setString(2, jour);
     			preparedStatement.setInt(3, tasses);
@@ -59,7 +62,6 @@ public class gestionProgrammeurs {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
