@@ -1,7 +1,17 @@
 //Toutes les question sont des requêtes au serveur.
 // yo
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.sql.*;
+import java.util.Scanner;
 public class gestionProgrammeurs {
+	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/bdprogrammeurs?serverTimezone=UTC"; // bd faite dans mysql local
+	private static final String USAGER = "root"; 
+	private static final String PASS = "cod7blackops"; // mettre le mdp de la bd local mysql
+	private static ResultSet rs = null;
+	private static Connection con = null;
+	private static Statement stmt = null;
     // variables pour le nom des tables de la bd
 	private static final String DB_NOM = "nom";
 	private static final String DB_JOUR = "journee";
@@ -32,18 +42,13 @@ public class gestionProgrammeurs {
      * que sa consommation ce jour la, puis la liste des personnes ordonnee par ordre décroissant
      * du nombre de consommations.
      */
-    public static void nbreTassesMax() throws SQLException   {
+    public static void nbreTassesMax(ResultSet result) throws SQLException  {
           // variables pour la personne ayant consomé le plus de tasse de café pour une journée
           String nomEmpPT = "";
           String jourPT = "";
           int  nbrTassesPT = 0;
-          String outputPlusCons = "Personne ayant la plus grande consommation pour une journée :\n";
-          String outputListe = "Liste des personnes par ordre de consommations :\nNom\tJour\tTasses\n";
-          Statement stmt;
-          Connection con = (Connection) MyConnection.getCon().createStatement();
-          stmt = con.createStatement();
-          String sql = "Select * from dbprogrammeurs";
-          ResultSet rs = stmt.executeQuery(sql);
+          String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\tJour\tTasses\n----------------------\n";
+          String outputListe = "Liste des personnes par ordre de consommations :\nNom\tJour\tTasses\n----------------------\n";
           
           while(rs.next()) {
         	  String nomEmp = rs.getString(DB_NOM);
@@ -60,7 +65,6 @@ public class gestionProgrammeurs {
            
           outputPlusCons += nomEmpPT + "\t" + jourPT + "\t" + nbrTassesPT + "\n";
           System.out.println(outputPlusCons + "\n\n" + outputListe);
-          con.close(); 
     }
     
     
@@ -106,15 +110,22 @@ public class gestionProgrammeurs {
     }
     
     
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         int rep;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        String sql = "Select * from dbprogrammeurs order by tasses desc";
         // Ouvrir une connexion à Oracle
         // A FAIRE
-
+		try{    
+		Class.forName(JDBC_DRIVER); 
+		con = DriverManager.getConnection(DB_URL,USAGER,PASS);    
+		stmt = con.createStatement();  
+		rs = stmt.executeQuery(sql);  
+		
         do {
             affMenu();
             
-			rep = Integer.parseInt("1");
+			rep = Integer.parseInt(reader.readLine());
                 System.out.println("\n\n");
                 
                 switch (rep) {
@@ -124,7 +135,7 @@ public class gestionProgrammeurs {
                     break;
                     case 2 : supprimerTable();
                     break;
-                    case 3 : nbreTassesMax();
+                    case 3 : nbreTassesMax(rs);
                     break;
                     case 4 : nbreTotalTasses();
                     break;
@@ -143,8 +154,12 @@ public class gestionProgrammeurs {
         } while (rep != 0);
         
         // Fermer la connexion à Oracle
+        con.close();  
+		}catch(Exception e){
+			System.out.println(e);
+		} 
         
 		//Autres si nécessaire
-    }*/
+    }
     
 }

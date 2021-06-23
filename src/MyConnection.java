@@ -4,11 +4,11 @@ class MyConnection{
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/bdprogrammeurs?serverTimezone=UTC"; // bd faite dans mysql local
 	private static final String USAGER = "root"; 
-	private static final String PASS = "cod7blackops"; // mettre le mdp de la bd local mysql
+	private static final String PASS = ""; // mettre le mdp de la bd local mysql
 	private static ResultSet rs;
 	private static Connection con;
 	private static Statement stmt;
-	
+	/*
 	public static void main(String args[]){  
 		try{  
 		//Class.forName("com.mysql.jdbc.Driver"); // semble que c'est pu supporté
@@ -25,14 +25,7 @@ class MyConnection{
 		}catch(Exception e){
 			System.out.println(e);
 		}  
-		
-		try {
-			gestionProgrammeurs.nbreTassesMax();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	}*/
 	
 	static public ResultSet getRS() {
 		return rs;
