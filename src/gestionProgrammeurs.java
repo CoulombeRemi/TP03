@@ -1,9 +1,12 @@
 //Toutes les question sont des requêtes au serveur.
 // yo
+import java.sql.*;
 public class gestionProgrammeurs {
-    
+    // variables pour le nom des tables de la bd
+	private static final String DB_NOM = "";
+	private static final String DB_JOUR = "";
+	private static final String DB_TASSES = "";
 
-    
      // Création de la table programmeurs
      
     public static void creerEtInitialiserTable() {
@@ -30,8 +33,32 @@ public class gestionProgrammeurs {
      * du nombre de consommations.
      */
     public static void nbreTassesMax()   {
-          System.out.println("Opération non encore implémentée");
-        
+          // variables pour la personne ayant consomé le plus de tasse de café pour une journée
+          String nomEmpPT = "";
+          String jourPT = "";
+          int  nbrTassesPT = 0;
+          String outputPlusCons = "Personne ayant la plus grande consommation pour une journée :\n";
+          String outputListe = "Liste des personnes par ordre de consommations :\nNom\tJour\tTasses\n";
+          
+          // probablement à changer
+          stmt = con.createStatement();
+          String sql = "Select * from Employe";
+          ResultSet rs = stmt.executeQuery(sql);
+          
+          while(rs.next()) {
+        	  String nomEmp = rs.getString(DB_NOM);
+        	  String jour = rs.getString(DB_JOUR);
+        	  int nbrTasses = rs.getInt(DB_TASSES);
+        	  // on trouve la personne avec la plus grande consommation
+        	  if(nbrTassesPT < nbrTasses) {
+        		  nomEmpPT = nomEmp;
+        		  jourPT = jour;
+        		  nbrTassesPT = nbrTasses;
+        	  }
+        	  outputListe += nomEmp + "\t" + jour + "\t" + nbrTasses + "\n";
+          }
+          outputPlusCons += nomEmpPT + "\t" + jourPT + "\t" + nbrTassesPT + "\n";
+          System.out.println(outputPlusCons + "\n\n" + outputListe);
     }
     
     
