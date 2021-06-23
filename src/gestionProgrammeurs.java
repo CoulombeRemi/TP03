@@ -3,9 +3,9 @@
 import java.sql.*;
 public class gestionProgrammeurs {
     // variables pour le nom des tables de la bd
-	private static final String DB_NOM = "";
-	private static final String DB_JOUR = "";
-	private static final String DB_TASSES = "";
+	private static final String DB_NOM = "nom";
+	private static final String DB_JOUR = "journee";
+	private static final String DB_TASSES = "tasses";
 
      // Création de la table programmeurs
      
@@ -42,7 +42,7 @@ public class gestionProgrammeurs {
           
           // probablement à changer
           stmt = con.createStatement();
-          String sql = "Select * from Employe";
+          String sql = "Select * from programmeurs";
           ResultSet rs = stmt.executeQuery(sql);
           
           while(rs.next()) {
