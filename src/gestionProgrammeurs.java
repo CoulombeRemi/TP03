@@ -205,25 +205,27 @@ public class gestionProgrammeurs {
      // Affiche le menu présentant les différentes opérations possibles
     public static void affMenu() {
         System.out.println("\n\n------------------------------------------");
-        System.out.println("1 : Créer la table");
-        System.out.println("2 : Détruire la table");
+        System.out.println("1 : Creer la table");
+        System.out.println("2 : Detruire la table");
         System.out.println("3 : Consommation max");
         System.out.println("4 : Nombre total de tasses");
         System.out.println("5 : Nombre total tasses pour un programmeur");
-        System.out.println("6 : Requete Libre et Méta données");
-        System.out.println("7 : Charger les données depuis un fichier");
+        System.out.println("6 : Requete Libre et Meta donnees");
+        System.out.println("7 : Charger les donnees depuis un fichier");
         System.out.println("0 : Quitter l'application");
 		System.out.println("Entrez votre choix : ");
     }
     
     
     public static void main(String[] args) {
+    	
+    	
         int rep;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String sql = "Select * from programmeurs order by tasses desc;";
         
         Conn.load();
-        // Ouvrir une connexion à Oracle
+        // Ouvrir une connexion mysql
         // A FAIRE
         try{
         	supprimerTable();
@@ -269,7 +271,7 @@ public class gestionProgrammeurs {
 	
 	        } while (rep != 0);
 	        
-	        // Fermer la connexion à Oracle
+	        // Fermer la connexiona mysql
 	        con.close();  
 		}catch(Exception e){
 			System.out.println(e);
