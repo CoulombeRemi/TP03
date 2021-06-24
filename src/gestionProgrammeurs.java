@@ -2,9 +2,10 @@
  * Rémi Coulombe - 20130013
  * Yanoé Roy-Fitton - 20175985
  * IFT1176 - tp03 - été 21
+ * 
+ * https://github.com/CoulombeRemi/TP03
  */
 //Toutes les question sont des requêtes au serveur.
-// yo
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -34,6 +35,7 @@ public class gestionProgrammeurs {
                " PRIMARY KEY ( id ))"; 
        try {
     	   stmt.executeUpdate(sql);
+    	   System.out.println("--- La table a été créée ---");
        }catch(SQLException e) {
     	   System.out.println(e);
        }
@@ -43,6 +45,7 @@ public class gestionProgrammeurs {
     public static void supprimerTable() {
        try {
     	   stmt.executeUpdate("drop table programmeurs;");
+    	   System.out.println("--- La table a été supprimée ---");
        } catch (SQLException e) {
     	   System.out.println("La table n'existe pas.");
        }
@@ -65,6 +68,7 @@ public class gestionProgrammeurs {
     			preparedStatement.executeUpdate();
     		}
     		fileR.close();
+    		System.out.println("--- La table a été chargée ---");
     	}catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -158,7 +162,7 @@ public class gestionProgrammeurs {
 	    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
 	    		
 	    		while(column.next()) {
-	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + column.getString("DATA_TYPE") + "\n";
+	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
 	    		}
 	    		
 	    		while(result.next()) {
@@ -183,6 +187,17 @@ public class gestionProgrammeurs {
     		str+="\t\t";
     	}
     	return str;
+    }
+    
+    // permet de convertir la valeur retourner par getString("DATA_TYPE") par un mots
+    private static String typeCheck(String string) {
+    	String rep = null;
+    	if(string.equals("4")) {
+    		rep = "integer";
+    	}else if(string.equals("12")) {
+    		rep = "varchar";
+    	}
+    	return rep;
     }
      
      // Affiche le menu présentant les différentes opérations possibles
@@ -226,6 +241,7 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 2 : supprimerTable();
 	                    break;
+	                    
 	                    case 3 : nbreTassesMax(stmt.executeQuery("Select * from programmeurs order by tasses desc;"));
 	                    break;
 	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select tasses from programmeurs;")); // a voir
