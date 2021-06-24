@@ -161,10 +161,11 @@ public class gestionProgrammeurs {
 	    		String outputCol = "Nom col.\tType\n------------------------\n";
 	    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
 	    		
+	    		// parcour les column
 	    		while(column.next()) {
 	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
 	    		}
-	    		
+	    		// parcour la bd et output l'info
 	    		while(result.next()) {
 	    			String nomEmp = result.getString(DB_NOM);
 	          	 	String jour = result.getString(DB_JOUR);
@@ -176,6 +177,7 @@ public class gestionProgrammeurs {
 	    		// on affiche le nombre de lignes modifiees dans la table
 	    	}
         }catch(SQLException e) {
+        	System.out.println("--- Problème avec la base de données ---");
         	System.out.println(e);
         }
     }
