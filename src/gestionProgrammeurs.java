@@ -243,7 +243,7 @@ public class gestionProgrammeurs {
         	creerEtInitialiserTable();
         	chargerBase();
         }catch(Exception e) {
-        	System.out.println("yo peter");
+        	System.out.println("");
         }
 		try{    
 			Class.forName(Conn.getJDBC()); 
