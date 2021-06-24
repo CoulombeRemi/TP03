@@ -1,3 +1,9 @@
+/**
+ * Rémi Coulombe - 20130013
+ * Yanoé Roy-Fitton - 20175985
+ * IFT1176 - tp03 - été 21
+ */
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
