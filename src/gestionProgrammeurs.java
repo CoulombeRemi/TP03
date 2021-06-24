@@ -14,10 +14,6 @@ import java.sql.*;
 
 public class gestionProgrammeurs {
 	private static final String FILE_PATH = "documents\\programmeurs.txt";
-	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://localhost:3306/bdprogrammeurs?serverTimezone=UTC"; // bd faite dans mysql local
-	private static final String USAGER = "root"; 
-	private static final String PASS = "";
 	private static ResultSet rs = null;
 	private static Connection con = null;
 	private static Statement stmt = null;
@@ -210,11 +206,13 @@ public class gestionProgrammeurs {
         int rep;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String sql = "Select * from programmeurs order by tasses desc;";
+        
+        Conn.load();
         // Ouvrir une connexion à Oracle
         // A FAIRE
 		try{    
-			Class.forName(JDBC_DRIVER); 
-			con = DriverManager.getConnection(DB_URL,USAGER,PASS);
+			Class.forName(Conn.getJDBC()); 
+			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
 			stmt = con.createStatement();  
 			//rs = stmt.executeQuery(sql);  
 		
