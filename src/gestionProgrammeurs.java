@@ -185,9 +185,7 @@ public class gestionProgrammeurs {
     	return str;
     }
      
-       
      // Affiche le menu présentant les différentes opérations possibles
-     
     public static void affMenu() {
         System.out.println("\n\n------------------------------------------");
         System.out.println("1 : Créer la table");
@@ -213,8 +211,7 @@ public class gestionProgrammeurs {
 		try{    
 			Class.forName(Conn.getJDBC()); 
 			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
-			stmt = con.createStatement();  
-			//rs = stmt.executeQuery(sql);  
+			stmt = con.createStatement();    
 		
 	        do {
 	            affMenu();
