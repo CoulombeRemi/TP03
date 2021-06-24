@@ -83,7 +83,7 @@ public class gestionProgrammeurs {
      * que sa consommation ce jour la, puis la liste des personnes ordonnee par ordre décroissant
      * du nombre de consommations.
      */
-    public static void nbreTassesMax(ResultSet result) throws SQLException  {
+    public static void nbreTassesMax() throws SQLException  {
           // variables pour la personne ayant consomé le plus de tasse de café pour une journée
           String nomEmpPT = "";
           String jourPT = "";
@@ -91,10 +91,10 @@ public class gestionProgrammeurs {
           String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
           String outputListe = "Liste des personnes par ordre de consommations :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
           
-          while(result.next()) {
-        	  String nomEmp = result.getString(DB_NOM);
-        	  String jour = result.getString(DB_JOUR);
-        	  int nbrTasses = result.getInt(DB_TASSES);
+          while(rs.next()) {
+        	  String nomEmp = rs.getString(DB_NOM);
+        	  String jour = rs.getString(DB_JOUR);
+        	  int nbrTasses = rs.getInt(DB_TASSES);
         	  // on trouve la personne avec la plus grande consommation
         	  if(nbrTassesPT < nbrTasses) {
         		  nomEmpPT = nomEmp;
@@ -225,10 +225,17 @@ public class gestionProgrammeurs {
         Conn.load();
         // Ouvrir une connexion à Oracle
         // A FAIRE
+        try{
+        	supprimerTable();
+        	creerEtInitialiserTable();
+        	chargerBase();
+        }catch(Exception e) {
+        	System.out.println("yo peter");
+        }
 		try{    
 			Class.forName(Conn.getJDBC()); 
 			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
-			stmt = con.createStatement();    
+			stmt = con.createStatement();
 		
 	        do {
 	            affMenu();
@@ -243,8 +250,9 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 2 : supprimerTable();
 	                    break;
-	                    
-	                    case 3 : nbreTassesMax(stmt.executeQuery("Select * from programmeurs order by tasses desc;"));
+	                    case 3 : 
+	                    	rs = stmt.executeQuery("Select * from programmeurs order by tasses desc;");
+	                    	nbreTassesMax();
 	                    break;
 	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select tasses from programmeurs;")); // a voir
 	                    break;
