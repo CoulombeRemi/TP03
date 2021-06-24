@@ -17,7 +17,7 @@ public class gestionProgrammeurs {
 	static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
 	private static final String DB_URL = "jdbc:mysql://localhost:3306/bdprogrammeurs?serverTimezone=UTC"; // bd faite dans mysql local
 	private static final String USAGER = "root"; 
-	private static final String PASS = "MySQLP4ss!"; // mettre le mdp de la bd local mysql
+	private static final String PASS = "";
 	private static ResultSet rs = null;
 	private static Connection con = null;
 	private static Statement stmt = null;
@@ -43,9 +43,7 @@ public class gestionProgrammeurs {
        }
     }
 
-    
      // Destruction de la table programmeurs.
-     
     public static void supprimerTable() {
        try {
     	   stmt.executeUpdate("drop table programmeurs;");
@@ -54,7 +52,6 @@ public class gestionProgrammeurs {
        }
     }
 
-   
      // Intialiasitation de la table programmeurs à partir des données lues dans un fichier texte.
     
     public static void chargerBase()  {
@@ -91,8 +88,8 @@ public class gestionProgrammeurs {
           String nomEmpPT = "";
           String jourPT = "";
           int  nbrTassesPT = 0;
-          String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\tJour\tTasses\n----------------------\n";
-          String outputListe = "Liste des personnes par ordre de consommations :\nNom\tJour\tTasses\n----------------------\n";
+          String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
+          String outputListe = "Liste des personnes par ordre de consommations :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
           
           while(result.next()) {
         	  String nomEmp = result.getString(DB_NOM);
@@ -104,10 +101,10 @@ public class gestionProgrammeurs {
         		  jourPT = jour;
         		  nbrTassesPT = nbrTasses;
         	  }
-        	  outputListe += nomEmp + "\t" + jour + "\t" + nbrTasses + "\n";
+        	  outputListe += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses + "\n";
           }
            
-          outputPlusCons += nomEmpPT + "\t" + jourPT + "\t" + nbrTassesPT + "\n";
+          outputPlusCons += lengthCheck(nomEmpPT) + lengthCheck(jourPT) + nbrTassesPT + "\n";
           System.out.println(outputPlusCons + "\n\n" + outputListe);
     }
     
@@ -244,7 +241,6 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 7 : chargerBase();
 	                    break;
-	                    
 	                    default:
 	                        System.out.println("Valeur erronée !");
 	                }  // end switch
