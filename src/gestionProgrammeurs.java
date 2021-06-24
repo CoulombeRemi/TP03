@@ -152,9 +152,20 @@ public class gestionProgrammeurs {
      */
 	 
     public static void requeteLibreEtMetaDonnees() {
+    	 String requeteLibre= "select * from programmeurs";
+    	 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    	 System.out.println("Exemple de requete libre : select * from programmeurs");
+    	 System.out.println("veuillez ecrire votre requete libre :");
+    	 try {
+			requeteLibre= reader.readLine();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+    	 
         try {
         	DatabaseMetaData databaseMetaData = con.getMetaData();
-            ResultSet result = stmt.executeQuery("select * from programmeurs");
+            ResultSet result = stmt.executeQuery(requeteLibre);
             ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
 	    	if(result.next()) {
 	    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
