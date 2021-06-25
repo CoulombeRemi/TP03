@@ -152,9 +152,9 @@ public class gestionProgrammeurs {
      */
 	 
     public static void requeteLibreEtMetaDonnees() {
-    	 String requeteLibre= "select * from programmeurs";
+    	 String requeteLibre= "SELECT * from programmeurs";
     	 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    	 System.out.println("Exemple de requete libre : select * from programmeurs");
+    	 System.out.println("Exemple de requete libre : SELECT * from programmeurs");
     	 System.out.println("veuillez ecrire votre requete libre :");
     	 try {
 			requeteLibre= reader.readLine();
@@ -162,7 +162,8 @@ public class gestionProgrammeurs {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    	 if(requeteLibre.substring(0, 6).equals("select")) {
+    	 String typeRequete =requeteLibre.substring(0, 6);
+    	 if(typeRequete.equals("SELECT")) {
     		 try {
     	        	DatabaseMetaData databaseMetaData = con.getMetaData();
     	            ResultSet result = stmt.executeQuery(requeteLibre);
@@ -189,30 +190,50 @@ public class gestionProgrammeurs {
     	        	System.out.println("--- Problème avec la base de données ---");
     	        	System.out.println(e);
     	        }
-    	 }else if (requeteLibre.substring(0, 6).equals("INSERT")||requeteLibre.substring(0, 6).equals("UPDATE")||requeteLibre.substring(0, 6).equals("DELETE")) {
+    	 }else if (typeRequete.equals("INSERT")) {
     		 try {
-    			 System.out.println("if else insert");
-    			 preparedStatement = con.prepareStatement("insert into programmeurs values (default, ?,?,?);");
-    	    			String parantese = requeteLibre.substring(requeteLibre.indexOf("(")+1, requeteLibre.indexOf(")"));
-    	    			String[] param= parantese.split(",");
-    	    			String nom = param[0].trim();
-    	    			String jour = param[1].trim();
-    	    			int tasses = Integer.parseInt(param[2].trim());
-    	    			preparedStatement.setString(1, nom);
-    	    			preparedStatement.setString(2, jour);
-    	    			preparedStatement.setInt(3, tasses);
-    	    			int nbLigne = preparedStatement.executeUpdate();
-				System.out.println(nbLigne +" on ete mit a jour");
+    			preparedStatement = con.prepareStatement("insert into programmeurs values (default, ?,?,?);");
+    			String parantese = requeteLibre.substring(requeteLibre.indexOf("(")+1, requeteLibre.indexOf(")"));
+    			String[] param= parantese.split(",");
+    			String nom = param[0].trim();
+    			String jour = param[1].trim();
+    			int tasses = Integer.parseInt(param[2].trim());
+    			preparedStatement.setString(1, nom);
+    			preparedStatement.setString(2, jour);
+    			preparedStatement.setInt(3, tasses);
+    			int nbLigne = preparedStatement.executeUpdate();
+				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
     		 
     		 
-    	 }else {
-    		 System.out.println("else other");
+    	 }else if (typeRequete.equals("UPDATE")) {
     		 try {
-				stmt.execute(requeteLibre);
+    			 //preparedStatement = con.prepareStatement("UPDATE programmeurs SET nom=? , journee=?, tasses=? where id=?");
+    	    	int nbLigne = stmt.executeUpdate(requeteLibre);
+				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 
+    		 
+    	 }else if (typeRequete.equals("DELETE")) {
+    		 try {
+     	    	int nbLigne = stmt.executeUpdate(requeteLibre);
+ 				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+     		 
+     		 
+     	 }else {
+    		 try {
+    			int nbLigne = stmt.executeUpdate(requeteLibre);
+  				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -269,18 +290,18 @@ public class gestionProgrammeurs {
         Conn.load();
         // Ouvrir une connexion mysql
         // A FAIRE
-        try{
-        	supprimerTable();
-        	creerEtInitialiserTable();
-        	chargerBase();
-        }catch(Exception e) {
-        	System.out.println("yo peter");
-        }
+       
 		try{    
 			Class.forName(Conn.getJDBC()); 
 			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
 			stmt = con.createStatement();
-		
+			 try{
+		        	supprimerTable();
+		        	creerEtInitialiserTable();
+		        	chargerBase();
+		        }catch(Exception e) {
+		        	System.out.println("yo peter");
+		        }
 	        do {
 	            affMenu();
 	            
