@@ -158,14 +158,11 @@ public class gestionProgrammeurs {
     	 System.out.println("veuillez ecrire votre requete libre :");
     	 try {
 			requeteLibre= reader.readLine();
-			System.out.println("lecture");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-    	 System.out.println("if else 0");
     	 if(requeteLibre.substring(0, 6).equals("select")) {
-    		 System.out.println("if else 1");
     		 try {
     	        	DatabaseMetaData databaseMetaData = con.getMetaData();
     	            ResultSet result = stmt.executeQuery(requeteLibre);
@@ -194,22 +191,17 @@ public class gestionProgrammeurs {
     	        }
     	 }else if (requeteLibre.substring(0, 6).equals("INSERT")||requeteLibre.substring(0, 6).equals("UPDATE")||requeteLibre.substring(0, 6).equals("DELETE")) {
     		 try {
-    			 
-    			 
+    			 System.out.println("if else insert");
     			 preparedStatement = con.prepareStatement("insert into programmeurs values (default, ?,?,?);");
-    	    		
-    	    			String[] parantese = requeteLibre.split("(");
-    	    			String[] param= parantese[1].split(",");
-    	    			String nom = param[0];
-    	    			String jour = param[1];
-    	    			int tasses = Integer.parseInt(param[2]);
+    	    			String parantese = requeteLibre.substring(requeteLibre.indexOf("(")+1, requeteLibre.indexOf(")"));
+    	    			String[] param= parantese.split(",");
+    	    			String nom = param[0].trim();
+    	    			String jour = param[1].trim();
+    	    			int tasses = Integer.parseInt(param[2].trim());
     	    			preparedStatement.setString(1, nom);
     	    			preparedStatement.setString(2, jour);
     	    			preparedStatement.setInt(3, tasses);
     	    			int nbLigne = preparedStatement.executeUpdate();
-    	    		
-    			 
-				 
 				System.out.println(nbLigne +" on ete mit a jour");
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -218,6 +210,7 @@ public class gestionProgrammeurs {
     		 
     		 
     	 }else {
+    		 System.out.println("else other");
     		 try {
 				stmt.execute(requeteLibre);
 			} catch (SQLException e) {
