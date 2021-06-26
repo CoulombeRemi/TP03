@@ -207,29 +207,6 @@ public class gestionProgrammeurs {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    		 
-    		 
-    	 }else if (typeRequete.equals("UPDATE")) {
-    		 try {
-    			 //preparedStatement = con.prepareStatement("UPDATE programmeurs SET nom=? , journee=?, tasses=? where id=?");
-    	    	int nbLigne = stmt.executeUpdate(requeteLibre);
-				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		 
-    		 
-    	 }else if (typeRequete.equals("DELETE")) {
-    		 try {
-     	    	int nbLigne = stmt.executeUpdate(requeteLibre);
- 				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
- 			} catch (SQLException e) {
- 				// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			}
-     		 
-     		 
      	 }else {
     		 try {
     			int nbLigne = stmt.executeUpdate(requeteLibre);
@@ -237,12 +214,8 @@ public class gestionProgrammeurs {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-    		 
+			} 
     	 }
-    	 
-    	 
-        
     }
     // methode pour ajuster le nbr de \t a faire pour un string
     private static String lengthCheck(String str) {
@@ -253,7 +226,6 @@ public class gestionProgrammeurs {
     	}
     	return str;
     }
-    
     // permet de convertir la valeur retourner par getString("DATA_TYPE") par un mots
     private static String typeCheck(String string) {
     	String rep = null;
@@ -281,16 +253,11 @@ public class gestionProgrammeurs {
     
     
     public static void main(String[] args) {
-    	
-    	
         int rep;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         String sql = "Select * from programmeurs order by tasses desc;";
-        
         Conn.load();
         // Ouvrir une connexion mysql
-        // A FAIRE
-       
 		try{    
 			Class.forName(Conn.getJDBC()); 
 			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
