@@ -206,31 +206,8 @@ public class gestionProgrammeurs {
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-    		 
-    		 
-    	 }else if (typeRequete.equals("UPDATE")) {
-    		 try {
-    			 //preparedStatement = con.prepareStatement("UPDATE programmeurs SET nom=? , journee=?, tasses=? where id=?");
-    	    	int nbLigne = stmt.executeUpdate(requeteLibre);
-				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-    		 
-    		 
-    	 }else if (typeRequete.equals("DELETE")) {
-    		 try {
-     	    	int nbLigne = stmt.executeUpdate(requeteLibre);
- 				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
- 			} catch (SQLException e) {
- 				// TODO Auto-generated catch block
- 				e.printStackTrace();
- 			}
-     		 
-     		 
-     	 }else {
+			} 
+    	 }else {
     		 try {
     			int nbLigne = stmt.executeUpdate(requeteLibre);
   				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
