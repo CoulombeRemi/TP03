@@ -110,9 +110,9 @@ public class gestionProgrammeurs {
     
     
      // Affiche le nombre total de tasses consommées.
-    public static void nbreTotalTasses(ResultSet result) throws SQLException {
+    public static void nbreTotalTasses() throws SQLException {
           int tasseTotal = 0;
-          while(result.next()) {tasseTotal += result.getInt(DB_TASSES);}
+          while(rs.next()) {tasseTotal += rs.getInt(DB_TASSES);}
           System.out.println("Le nombre total de consommations : " + tasseTotal + " tasses");
     }
     
@@ -296,7 +296,9 @@ public class gestionProgrammeurs {
 	                    	rs = stmt.executeQuery("Select * from programmeurs order by tasses desc;");
 	                    	nbreTassesMax();
 	                    break;
-	                    case 4 : nbreTotalTasses(stmt.executeQuery("Select tasses from programmeurs;")); // a voir
+	                    case 4 : 
+	                    	rs = stmt.executeQuery("Select tasses from programmeurs;");
+	                    	nbreTotalTasses(); // a voir
 	                    break;
 	                    case 5 : nbreTotalTassesPgm();
 	                    break;
