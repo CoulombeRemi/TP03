@@ -158,39 +158,77 @@ public class gestionProgrammeurs {
     	 System.out.println("veuillez ecrire votre requete libre :");
     	 try {
 			requeteLibre= reader.readLine();
+			System.out.println("lecture");
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+    	 System.out.println("if else 0");
+    	 if(requeteLibre.substring(0, 6).equals("select")) {
+    		 System.out.println("if else 1");
+    		 try {
+    	        	DatabaseMetaData databaseMetaData = con.getMetaData();
+    	            ResultSet result = stmt.executeQuery(requeteLibre);
+    	            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
+    		    	if(result.next()) {
+    		    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
+    		    		String outputCol = "Nom col.\tType\n------------------------\n";
+    		    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
+    		    		
+    		    		// parcour les column
+    		    		while(column.next()) {
+    		    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
+    		    		}
+    		    		// parcour la bd et output l'info
+    		    		while(result.next()) {
+    		    			String nomEmp = result.getString(DB_NOM);
+    		          	 	String jour = result.getString(DB_JOUR);
+    		          	 	int nbrTasses = result.getInt(DB_TASSES);
+    		          	 	outputList += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses+"\n";
+    		    		}
+    		    		System.out.println(outputNbrCol + "\n\n" + outputCol+"\n"+outputList);
+    		    	}
+    	        }catch(SQLException e) {
+    	        	System.out.println("--- Problème avec la base de données ---");
+    	        	System.out.println(e);
+    	        }
+    	 }else if (requeteLibre.substring(0, 6).equals("INSERT")||requeteLibre.substring(0, 6).equals("UPDATE")||requeteLibre.substring(0, 6).equals("DELETE")) {
+    		 try {
+    			 
+    			 
+    			 preparedStatement = con.prepareStatement("insert into programmeurs values (default, ?,?,?);");
+    	    		
+    	    			String[] parantese = requeteLibre.split("(");
+    	    			String[] param= parantese[1].split(",");
+    	    			String nom = param[0];
+    	    			String jour = param[1];
+    	    			int tasses = Integer.parseInt(param[2]);
+    	    			preparedStatement.setString(1, nom);
+    	    			preparedStatement.setString(2, jour);
+    	    			preparedStatement.setInt(3, tasses);
+    	    			int nbLigne = preparedStatement.executeUpdate();
+    	    		
+    			 
+				 
+				System.out.println(nbLigne +" on ete mit a jour");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 
+    		 
+    	 }else {
+    		 try {
+				stmt.execute(requeteLibre);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 
+    	 }
     	 
-        try {
-        	DatabaseMetaData databaseMetaData = con.getMetaData();
-            ResultSet result = stmt.executeQuery(requeteLibre);
-            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
-	    	if(result.next()) {
-	    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
-	    		String outputCol = "Nom col.\tType\n------------------------\n";
-	    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
-	    		
-	    		// parcour les column
-	    		while(column.next()) {
-	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
-	    		}
-	    		// parcour la bd et output l'info
-	    		while(result.next()) {
-	    			String nomEmp = result.getString(DB_NOM);
-	          	 	String jour = result.getString(DB_JOUR);
-	          	 	int nbrTasses = result.getInt(DB_TASSES);
-	          	 	outputList += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses+"\n";
-	    		}
-	    		System.out.println(outputNbrCol + "\n\n" + outputCol+"\n"+outputList);
-	    	}else {
-	    		// on affiche le nombre de lignes modifiees dans la table
-	    	}
-        }catch(SQLException e) {
-        	System.out.println("--- Problème avec la base de données ---");
-        	System.out.println(e);
-        }
+    	 
+        
     }
     // methode pour ajuster le nbr de \t a faire pour un string
     private static String lengthCheck(String str) {
