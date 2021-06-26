@@ -152,9 +152,9 @@ public class gestionProgrammeurs {
      */
 	 
     public static void requeteLibreEtMetaDonnees() {
-    	 String requeteLibre= "select * from programmeurs";
+    	 String requeteLibre= "SELECT * from programmeurs";
     	 BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    	 System.out.println("Exemple de requete libre : select * from programmeurs");
+    	 System.out.println("Exemple de requete libre : SELECT * from programmeurs");
     	 System.out.println("veuillez ecrire votre requete libre :");
     	 try {
 			requeteLibre= reader.readLine();
@@ -162,35 +162,87 @@ public class gestionProgrammeurs {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+    	 String typeRequete =requeteLibre.substring(0, 6);
+    	 if(typeRequete.equals("SELECT")) {
+    		 try {
+    	        	DatabaseMetaData databaseMetaData = con.getMetaData();
+    	            ResultSet result = stmt.executeQuery(requeteLibre);
+    	            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
+    		    	if(result.next()) {
+    		    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
+    		    		String outputCol = "Nom col.\tType\n------------------------\n";
+    		    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
+    		    		
+    		    		// parcour les column
+    		    		while(column.next()) {
+    		    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
+    		    		}
+    		    		// parcour la bd et output l'info
+    		    		while(result.next()) {
+    		    			String nomEmp = result.getString(DB_NOM);
+    		          	 	String jour = result.getString(DB_JOUR);
+    		          	 	int nbrTasses = result.getInt(DB_TASSES);
+    		          	 	outputList += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses+"\n";
+    		    		}
+    		    		System.out.println(outputNbrCol + "\n\n" + outputCol+"\n"+outputList);
+    		    	}
+    	        }catch(SQLException e) {
+    	        	System.out.println("--- Problème avec la base de données ---");
+    	        	System.out.println(e);
+    	        }
+    	 }else if (typeRequete.equals("INSERT")) {
+    		 try {
+    			preparedStatement = con.prepareStatement("insert into programmeurs values (default, ?,?,?);");
+    			String parantese = requeteLibre.substring(requeteLibre.indexOf("(")+1, requeteLibre.indexOf(")"));
+    			String[] param= parantese.split(",");
+    			String nom = param[0].trim();
+    			String jour = param[1].trim();
+    			int tasses = Integer.parseInt(param[2].trim());
+    			preparedStatement.setString(1, nom);
+    			preparedStatement.setString(2, jour);
+    			preparedStatement.setInt(3, tasses);
+    			int nbLigne = preparedStatement.executeUpdate();
+				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 
+    		 
+    	 }else if (typeRequete.equals("UPDATE")) {
+    		 try {
+    			 //preparedStatement = con.prepareStatement("UPDATE programmeurs SET nom=? , journee=?, tasses=? where id=?");
+    	    	int nbLigne = stmt.executeUpdate(requeteLibre);
+				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 
+    		 
+    	 }else if (typeRequete.equals("DELETE")) {
+    		 try {
+     	    	int nbLigne = stmt.executeUpdate(requeteLibre);
+ 				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+ 			} catch (SQLException e) {
+ 				// TODO Auto-generated catch block
+ 				e.printStackTrace();
+ 			}
+     		 
+     		 
+     	 }else {
+    		 try {
+    			int nbLigne = stmt.executeUpdate(requeteLibre);
+  				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    		 
+    	 }
     	 
-        try {
-        	DatabaseMetaData databaseMetaData = con.getMetaData();
-            ResultSet result = stmt.executeQuery(requeteLibre);
-            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
-	    	if(result.next()) {
-	    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
-	    		String outputCol = "Nom col.\tType\n------------------------\n";
-	    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
-	    		
-	    		// parcour les column
-	    		while(column.next()) {
-	    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
-	    		}
-	    		// parcour la bd et output l'info
-	    		while(result.next()) {
-	    			String nomEmp = result.getString(DB_NOM);
-	          	 	String jour = result.getString(DB_JOUR);
-	          	 	int nbrTasses = result.getInt(DB_TASSES);
-	          	 	outputList += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses+"\n";
-	    		}
-	    		System.out.println(outputNbrCol + "\n\n" + outputCol+"\n"+outputList);
-	    	}else {
-	    		// on affiche le nombre de lignes modifiees dans la table
-	    	}
-        }catch(SQLException e) {
-        	System.out.println("--- Problème avec la base de données ---");
-        	System.out.println(e);
-        }
+    	 
+        
     }
     // methode pour ajuster le nbr de \t a faire pour un string
     private static String lengthCheck(String str) {
@@ -238,18 +290,18 @@ public class gestionProgrammeurs {
         Conn.load();
         // Ouvrir une connexion mysql
         // A FAIRE
-        try{
-        	supprimerTable();
-        	creerEtInitialiserTable();
-        	chargerBase();
-        }catch(Exception e) {
-        	System.out.println("");
-        }
+       
 		try{    
 			Class.forName(Conn.getJDBC()); 
 			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
 			stmt = con.createStatement();
-		
+			 try{
+		        	supprimerTable();
+		        	creerEtInitialiserTable();
+		        	chargerBase();
+		        }catch(Exception e) {
+		        	System.out.println("yo peter");
+		        }
 	        do {
 	            affMenu();
 	            
@@ -281,7 +333,7 @@ public class gestionProgrammeurs {
 	                
 	
 	        } while (rep != 0);
-	        
+	       
 	        // Fermer la connexiona mysql
 	        con.close();  
 		}catch(Exception e){
