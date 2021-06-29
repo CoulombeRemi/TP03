@@ -159,7 +159,6 @@ public class gestionProgrammeurs {
     	 try {
 			requeteLibre= reader.readLine();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
     	 String typeRequete =requeteLibre.substring(0, 6);
@@ -209,7 +208,6 @@ public class gestionProgrammeurs {
     			int nbLigne = preparedStatement.executeUpdate();
 				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
     	 }else {
@@ -217,10 +215,8 @@ public class gestionProgrammeurs {
     			int nbLigne = stmt.executeUpdate(requeteLibre);
   				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    		 
     	 }
     }
     
@@ -250,27 +246,22 @@ public class gestionProgrammeurs {
     
     
     public static void main(String[] args) {
-    	
-    	
+
         int rep;
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        String sql = "Select * from programmeurs order by tasses desc;";
-        
         Conn.load();
-        // Ouvrir une connexion mysql
-        // A FAIRE
        
 		try{    
 			Class.forName(Conn.getJDBC()); 
 			con = DriverManager.getConnection(Conn.getURL(), Conn.getUser(),Conn.getPass());
 			stmt = con.createStatement();
-			 try{
+			try{
 		        	supprimerTable();
 		        	creerEtInitialiserTable();
 		        	chargerBase();
-		        }catch(Exception e) {
-		        	System.out.println("yo peter");
-		        }
+	        }catch(Exception e) {
+	        	System.out.println("yo peter");
+	        }
 	        do {
 	            affMenu();
 	            
@@ -304,14 +295,10 @@ public class gestionProgrammeurs {
 	                
 	
 	        } while (rep != 0);
-	       
 	        // Fermer la connexiona mysql
 	        con.close();  
 		}catch(Exception e){
 			System.out.println(e);
-		} 
-        
-		//Autres si nécessaire
+		}
     }
-    
 }
