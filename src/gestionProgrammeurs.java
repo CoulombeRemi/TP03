@@ -169,14 +169,19 @@ public class gestionProgrammeurs {
     	            ResultSet result = stmt.executeQuery(requeteLibre);
     	            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
     		    	if(result.next()) {
-    		    		String outputNbrCol = "Nombre de colonnes dans la table : " + result.getMetaData().getColumnCount();
-    		    		String outputCol = "Nom col.\tType\n------------------------\n";
+    		    		int nbrCol = result.getMetaData().getColumnCount();
+    		    		String outputNbrCol = "Nombre de colonnes dans la table : " + nbrCol;
+    		    		String outputCol = "\nTable: " + result.getMetaData().getTableName(1)+"\nNom col.\tType\n------------------------\n";
     		    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
     		    		
+    		            for (int i = 1; i<= nbrCol; i++){
+    		            	outputCol += result.getMetaData().getColumnName(i)+"\t\t"+result.getMetaData().getColumnTypeName(i) + "\n";
+    		            }
+    		    		/*
     		    		// parcour les column
     		    		while(column.next()) {
     		    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
-    		    		}
+    		    		}*/
     		    		// parcour la bd et output l'info
     		    		while(result.next()) {
     		    			String nomEmp = result.getString(DB_NOM);
@@ -298,7 +303,7 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 4 : 
 	                    	rs = stmt.executeQuery("Select tasses from programmeurs;");
-	                    	nbreTotalTasses(); // a voir
+	                    	nbreTotalTasses();
 	                    break;
 	                    case 5 : nbreTotalTassesPgm();
 	                    break;
