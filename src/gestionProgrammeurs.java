@@ -222,10 +222,8 @@ public class gestionProgrammeurs {
 			}
     		 
     	 }
-    	 
-    	 
-        
     }
+    
     // methode pour ajuster le nbr de \t a faire pour un string
     private static String lengthCheck(String str) {
     	if(str.length() >= 8) {
@@ -234,17 +232,6 @@ public class gestionProgrammeurs {
     		str+="\t\t";
     	}
     	return str;
-    }
-    
-    // permet de convertir la valeur retourner par getString("DATA_TYPE") par un mots
-    private static String typeCheck(String string) {
-    	String rep = null;
-    	if(string.equals("4")) {
-    		rep = "integer";
-    	}else if(string.equals("12")) {
-    		rep = "varchar";
-    	}
-    	return rep;
     }
      
      // Affiche le menu présentant les différentes opérations possibles
