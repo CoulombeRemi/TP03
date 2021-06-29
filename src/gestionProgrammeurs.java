@@ -84,34 +84,36 @@ public class gestionProgrammeurs {
      * du nombre de consommations.
      */
     public static void nbreTassesMax() throws SQLException  {
-          // variables pour la personne ayant consomé le plus de tasse de café pour une journée
-          String nomEmpPT = "";
-          String jourPT = "";
-          int  nbrTassesPT = 0;
-          String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
-          String outputListe = "Liste des personnes par ordre de consommations :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
-          
-          while(rs.next()) {
-        	  String nomEmp = rs.getString(DB_NOM);
-        	  String jour = rs.getString(DB_JOUR);
-        	  int nbrTasses = rs.getInt(DB_TASSES);
-        	  // on trouve la personne avec la plus grande consommation
-        	  if(nbrTassesPT < nbrTasses) {
-        		  nomEmpPT = nomEmp;
-        		  jourPT = jour;
-        		  nbrTassesPT = nbrTasses;
-        	  }
-        	  outputListe += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses + "\n";
-          }
-           
-          outputPlusCons += lengthCheck(nomEmpPT) + lengthCheck(jourPT) + nbrTassesPT + "\n";
-          System.out.println(outputPlusCons + "\n\n" + outputListe);
+    	rs = stmt.executeQuery("Select * from programmeurs order by tasses desc;");
+    	// variables pour la personne ayant consomé le plus de tasse de café pour une journée
+    	String nomEmpPT = "";
+    	String jourPT = "";
+    	int  nbrTassesPT = 0;
+    	String outputPlusCons = "Personne ayant la plus grande consommation en une journée :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
+    	String outputListe = "Liste des personnes par ordre de consommations :\nNom\t\tJour\t\tTasses\n---------------------------------------\n";
+  
+    	while(rs.next()) {
+    		String nomEmp = rs.getString(DB_NOM);
+    		String jour = rs.getString(DB_JOUR);
+    		int nbrTasses = rs.getInt(DB_TASSES);
+    		// on trouve la personne avec la plus grande consommation
+    		if(nbrTassesPT < nbrTasses) {
+    			nomEmpPT = nomEmp;
+    			jourPT = jour;
+    			nbrTassesPT = nbrTasses;
+    		}
+    		outputListe += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses + "\n";
+    	}
+   
+    	outputPlusCons += lengthCheck(nomEmpPT) + lengthCheck(jourPT) + nbrTassesPT + "\n";
+    	System.out.println(outputPlusCons + "\n\n" + outputListe);
     }
     
     
      // Affiche le nombre total de tasses consommées.
     public static void nbreTotalTasses() throws SQLException {
           int tasseTotal = 0;
+          rs = stmt.executeQuery("Select tasses from programmeurs;");
           while(rs.next()) {tasseTotal += rs.getInt(DB_TASSES);}
           System.out.println("Le nombre total de consommations : " + tasseTotal + " tasses");
     }
@@ -161,26 +163,21 @@ public class gestionProgrammeurs {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-    	 String typeRequete =requeteLibre.substring(0, 6);
+    	 String typeRequete = requeteLibre.substring(0, 6);
     	 if(typeRequete.equals("SELECT")) {
     		 try {
-    	        	DatabaseMetaData databaseMetaData = con.getMetaData();
     	            ResultSet result = stmt.executeQuery(requeteLibre);
-    	            ResultSet column = databaseMetaData.getColumns(null,null, "programmeurs", null);
     		    	if(result.next()) {
     		    		int nbrCol = result.getMetaData().getColumnCount();
-    		    		String outputNbrCol = "Nombre de colonnes dans la table : " + nbrCol;
-    		    		String outputCol = "\nTable: " + result.getMetaData().getTableName(1)+"\nNom col.\tType\n------------------------\n";
+    		    		String outputNbrCol = "\nNombre de colonnes dans la table : " + nbrCol;
+    		    		String outputCol = "Table: " + result.getMetaData().getTableName(1)+"\n\nNom col.\tType\n------------------------\n";
     		    		String outputList = "Nom\t\tJournee\t\tTasses\n----------------------------------------\n";
     		    		
+    		    		// affiche les metadata des col.
     		            for (int i = 1; i<= nbrCol; i++){
     		            	outputCol += result.getMetaData().getColumnName(i)+"\t\t"+result.getMetaData().getColumnTypeName(i) + "\n";
     		            }
-    		    		/*
-    		    		// parcour les column
-    		    		while(column.next()) {
-    		    			outputCol += column.getString("COLUMN_NAME") + "\t\t" + typeCheck(column.getString("DATA_TYPE")) + "\n";
-    		    		}*/
+
     		    		// parcour la bd et output l'info
     		    		while(result.next()) {
     		    			String nomEmp = result.getString(DB_NOM);
@@ -188,7 +185,7 @@ public class gestionProgrammeurs {
     		          	 	int nbrTasses = result.getInt(DB_TASSES);
     		          	 	outputList += lengthCheck(nomEmp) + lengthCheck(jour) + nbrTasses+"\n";
     		    		}
-    		    		System.out.println(outputNbrCol + "\n\n" + outputCol+"\n"+outputList);
+    		    		System.out.println(outputNbrCol + "\n" + outputCol+"\n"+outputList);
     		    	}
     	        }catch(SQLException e) {
     	        	System.out.println("--- Problème avec la base de données ---");
@@ -206,14 +203,14 @@ public class gestionProgrammeurs {
     			preparedStatement.setString(2, jour);
     			preparedStatement.setInt(3, tasses);
     			int nbLigne = preparedStatement.executeUpdate();
-				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+				System.out.println(nbLigne +" lignes ont été mises à jour");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} 
     	 }else {
     		 try {
     			int nbLigne = stmt.executeUpdate(requeteLibre);
-  				System.out.println(nbLigne +" de ligne(s) on ete mit a jour");
+  				System.out.println(nbLigne +" lignes ont été mises à jour");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -264,7 +261,6 @@ public class gestionProgrammeurs {
 	        }
 	        do {
 	            affMenu();
-	            
 				rep = Integer.parseInt(reader.readLine());
 	                System.out.println("\n\n");
 	                
@@ -275,13 +271,9 @@ public class gestionProgrammeurs {
 	                    break;
 	                    case 2 : supprimerTable();
 	                    break;
-	                    case 3 : 
-	                    	rs = stmt.executeQuery("Select * from programmeurs order by tasses desc;");
-	                    	nbreTassesMax();
+	                    case 3 : nbreTassesMax();
 	                    break;
-	                    case 4 : 
-	                    	rs = stmt.executeQuery("Select tasses from programmeurs;");
-	                    	nbreTotalTasses();
+	                    case 4 : nbreTotalTasses();
 	                    break;
 	                    case 5 : nbreTotalTassesPgm();
 	                    break;
@@ -291,12 +283,21 @@ public class gestionProgrammeurs {
 	                    break;
 	                    default:
 	                        System.out.println("Valeur erronée !");
-	                }  // end switch
+	                }
 	                
-	
 	        } while (rep != 0);
-	        // Fermer la connexiona mysql
-	        con.close();  
+	        // Fermer la connexiona mysql 
+	        try {
+	        	if(rs != null) {
+	        		rs.close();
+	        	}
+	        	if(stmt != null) {
+	        		stmt.close();
+	        	}
+	        	if(con != null) {
+	        		con.close();
+	        	}
+	        }catch(Exception e) {}
 		}catch(Exception e){
 			System.out.println(e);
 		}
